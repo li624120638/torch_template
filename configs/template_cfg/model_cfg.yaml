@@ -1,0 +1,15 @@
+# model module
+module: models.model.MyModel
+
+# common parameters
+common: {}
+
+
+# model parameters
+args: {}
+
+# resume parameters
+pretrained: null  # pretrained weights, maybe from other tasks.
+ignore_weights: [] # ignore some weights in pretrained model.
+weights: weights/best.pt  # train phase will be ignored, but required by test phase.
+

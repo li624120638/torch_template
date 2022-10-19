@@ -1,0 +1,71 @@
+phase: train  # 'train' or 'test'
+device: 0
+random_fix: true
+random_seed: 42
+print_log: true
+log_interval: 10
+work_dir: work_dir/  # final work directory: work_dir/${phase}/${name}*/
+name: exp
+exist_ok: true  # no increase {name} automatically
+resume: false  # resume last train. When phase is 'test', it will be ignored.
+num_epoches: 200
+
+common: # common parameters for 'Loss', 'Metric', 'Visualization', even for 'data_cfg' or 'model_cfg'
+  transform_dict: &transform_dict
+    Resize:
+      size: [ 224, 224 ]
+    ToTensor: null  # PyTorch transforms, **kwargs
+
+
+
+# Dataloader
+batch_size: &batch_size 32
+num_worker: &num_worker 0
+pin_memory: &pin_memory true
+dataloader_args:
+  train:
+    shuffle: true
+    batch_size: *batch_size
+    num_workers: *num_worker
+    pin_memory: *pin_memory
+  valid:
+    shuffle: false
+    batch_size: *batch_size
+    num_workers: *num_worker
+    pin_memory: *pin_memory
+  test: {}
+
+# Optimizer:
+optimizer_args:
+  module: optim.Adam  # torch optimizer start with 'optim'
+  args: # if no mention, will be set to default
+    lr: 0.0001
+    betas: [0.9, 0.999]
+    eps: 1.0e-8 # 1e-8 will be translated as str
+    weight_decay: 0.05
+    # ... see Pytorch document
+  scheduler_module: lr_scheduler.ReduceLROnPlateau  # torch scheduler start with 'lr_scheduler'
+  scheduler_args:  # if no mention, will be set to default
+    mode: min
+    factor: 0.1
+    patience: 10
+    verbose: False
+    # ... see Pytorch document
+
+# Loss
+loss_args:
+  loss_name: Loss
+  module: losses.loss.MyLoss
+  args: {}  # loss function keyword parameters
+
+# Metric
+metric_args:
+  metric_name: Accuracy
+  module: evaluates.evaluate.MyMetric
+  args: {}  # metric function keyword parameters
+
+# Visualization
+visualization_args:
+  module: visualizations.visualization.MyVis
+  flag: true
+  args: {}

@@ -1,0 +1,32 @@
+# train set starts with 'train' followed by its parameters
+# valid set starts with 'valid' followed by its parameters
+# test set starts with 'test' followed by its parameters
+# same prefix will be added together by '+=' operation
+# '{}' means using default parameters, rather do not have a certain set.
+# If you do not want have some certain set, you should not mention its config in this file.
+
+# dataset module
+module: datasets.dataset.MyDataset
+
+# common parameters
+common:
+  transform_dict: &transform_dict
+    ToTensor: null
+
+# train set
+train0:
+  transform_dict: *transform_dict
+
+# train1: {}
+# ...
+
+# valid set
+valid0:
+  transform_dict: *transform_dict
+# valid1: {}
+# ...
+
+# test set
+# test0: {}
+# test1: {}
+# ...
